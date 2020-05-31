@@ -4,9 +4,9 @@
 
 #ifndef INCLUDE_POINTERS_TESTS_SCOPED_PTR_H_
 #define INCLUDE_POINTERS_TESTS_SCOPED_PTR_H_
+#include "scoped_ptr.h"
 #include <cassert>
 #include <iostream>
-#include "scoped_ptr.h"
 
 static void test_scoped_ptr() {
     static_assert(
