@@ -6,6 +6,7 @@
 #define INCLUDE_POINTERS_SHARED_PTR_H_
 
 
+#include <initializer_list>
 template<typename T>
 class shared_ptr {
     T *ptr_;    // сам сырой указатель
@@ -13,16 +14,23 @@ class shared_ptr {
 public:
     typedef T element_type;
 
-    explicit shared_ptr(T *ptr = nullptr) : ptr_(ptr), count_(new int{1}) {}// явный конструктор для оборачивания указателя
+    explicit shared_ptr(T *ptr = nullptr) : ptr_(ptr) {
+        count_ = new int{1};
+    }// явный конструктор для оборачивания указателя
 
     shared_ptr(const shared_ptr &sharedPtr):ptr_(sharedPtr.get()),count_ (sharedPtr.count_) {
         (*count_)++;
     }// конструктор копирования, который инкрементирует счетчик ссылок  и сохраняет указатель
 
-
+//    shared_ptr(const std::initializer_list<T> &list){
+//            ptr_ = list[1];
+//    }
     shared_ptr& operator=(const shared_ptr& shared_ptr) {
         if (this != &shared_ptr) {
-            ptr_ = shared_ptr.get();
+            if (count_ != nullptr) {
+                (*count_)--;
+            }
+            ptr_ = shared_ptr.ptr_;
             count_ = shared_ptr.count_;
             (*count_)++;
         }
@@ -35,7 +43,6 @@ public:
     ~shared_ptr() {
         (*count_)--;
         if ((*count_) == 0) {
-            ptr_ = nullptr;
             delete ptr_;
             delete count_;
         }

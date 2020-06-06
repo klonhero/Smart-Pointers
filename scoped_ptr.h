@@ -34,7 +34,11 @@ public:
         ptr_ = ptr;// метод reset для очистки или замены указателя
     }
 
-    T *release() { return ptr_; }// метод release чтобы отдать сырой указатель, НО НЕ УДАЛЯТЬ его
+    T *release() {
+        T* temp = ptr_;
+        ptr_ = nullptr;
+        return temp;
+    }// метод release чтобы отдать сырой указатель, НО НЕ УДАЛЯТЬ его
 
     // это оператор, чтобы можно было писать if (sptr) { ... }.
     explicit operator bool() const { return ptr_ != nullptr; }
